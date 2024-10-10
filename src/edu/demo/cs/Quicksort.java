@@ -14,6 +14,10 @@ public class Quicksort<T> {
     private final Comparator<T> c;
     private boolean verbose = true;
 
+    public ArrayList<T> getData() {
+        return data;
+    }
+
     public void setVerbose(boolean verbose) {
         this.verbose = verbose;
     }
@@ -65,6 +69,13 @@ public class Quicksort<T> {
         System.out.println();
     }
 
+    void printList() {
+        for(T i : data) {
+            System.out.print(i + " " );
+        }
+        System.out.println();
+    }
+
     public T[] sort(T[] a) {
         return sort(a, 0, a.length);
     }
@@ -94,20 +105,43 @@ public class Quicksort<T> {
 
     public static void main(String[] args) {
 
+        // Let's test the Quicksort class using integers
         ArrayList<Integer> myList = new ArrayList<>();
         Random r = new Random();
-        for(int i = 0; i < 5000000; i++) {
-            myList.add(r.nextInt(1000000));
+        for(int i = 0; i < 10; i++) {
+            myList.add(r.nextInt(100));
         }
 
         Quicksort<Integer> q = new Quicksort<>(myList, Integer::compareTo);
         q.setVerbose(false);
         q.printList(myList.toArray());
         long start = System.nanoTime();
-        Integer[] i = q.sort(myList.toArray(new Integer[0]));
+        Integer[] nums = q.sort(myList.toArray(new Integer[0]));
         long end = System.nanoTime();
-        q.printList(i);
+        q.printList(nums);
         System.out.println("Total swaps: " + q.getTotal_swaps());
+        System.out.println("Time taken: " + (end - start) + " ns");
+        System.out.println(TimeUnit.NANOSECONDS.toMillis(end - start) + " ms");
+
+        ArrayList<String> words = new ArrayList<>(100000);
+        for(int i = 0; i < 10; i++) {
+            char[] word = new char[r.nextInt(8)+3]; // 3 to 10 character words
+            for(int j = 0; j < word.length; j++)
+            {
+                word[j] = (char)('a' + r.nextInt(26));
+            }
+            words.add(new String(word));
+        }
+
+        // Let's test the Quicksort class using made up words
+        Quicksort<String> q2 = new Quicksort<>(words, String::compareTo);
+        q2.setVerbose(false);
+        q2.printList();
+        start = System.nanoTime();
+        String[] wordArray = q2.sort(words.toArray(new String[0]));
+        end = System.nanoTime();
+        q2.printList(wordArray);
+        System.out.println("Total swaps: " + q2.getTotal_swaps());
         System.out.println("Time taken: " + (end - start) + " ns");
         System.out.println(TimeUnit.NANOSECONDS.toMillis(end - start) + " ms");
     }
